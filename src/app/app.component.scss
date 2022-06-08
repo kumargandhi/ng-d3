@@ -1,0 +1,9 @@
+.main-container {
+  display: flex;
+  overflow: hidden;
+
+  .router-container {
+    width: 100%;
+    min-width: 0;
+  }
+}

@@ -1,9 +1,35 @@
-/* You can add global styles to this file, and also import other style files */
+// Note: We are importing all the bootstrap styles but you wouldn't need that.
+@import './node_modules/bootstrap/scss/bootstrap';
+@import './node_modules/bootstrap-icons/font/bootstrap-icons';
+@import 'assets/fonts/open-sans-fonts';
+@import 'assets/scss/variables';
+@import 'assets/scss/bootstrap_overrides';
+/* Importing Datepicker SCSS file. */
+@import "~ngx-bootstrap/datepicker/bs-datepicker";
 
 html,
 body {
+    font-size: $font-size-root !important;
+    font-family: $font-family-name !important;
     margin: 0;
     overflow: hidden;
     width: 100vw !important;
     height: 100vh !important;
+}
+
+//This is the main application container ID, includes the application header
+#page-container {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    overflow-y: hidden;
+    background: $theme-gray-light;
+
+    & > #page-title {
+        background-color: inherit;
+        color: $theme-gray-dark;
+        margin: 0 !important;
+        padding-right: 15px;
+        padding-bottom: 15px;
+    }
 }

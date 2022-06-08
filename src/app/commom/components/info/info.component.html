@@ -1,0 +1,27 @@
+<div class="modal-header">
+    <h4 class="modal-title pull-left">{{ title }}</h4>
+    <button
+        type="button"
+        class="btn-close close pull-right"
+        aria-label="Close"
+        (click)="bsModalRef.hide()"
+    >
+        <span aria-hidden="true" class="visually-hidden">&times;</span>
+    </button>
+</div>
+<div class="modal-body text-center">
+    <img src="./assets/images/profile_pic.png" />
+    <p class="mt-3">
+        I am
+        <span class="fw-bold">Kumar Gandhi</span> a developer currently working
+        with JavaScript, Angular, NodeJS, MongoDB, CSS...
+    </p>
+    <a href="https://github.com/kumargandhi" class="card-link" target="_blank"
+        >Github</a
+    >
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-primary" (click)="bsModalRef.hide()">
+        {{ closeBtnName }}
+    </button>
+</div>
