@@ -11,10 +11,11 @@ html,
 body {
     font-size: $font-size-root !important;
     font-family: $font-family-name !important;
-    margin: 0;
     overflow: hidden;
     width: 100vw !important;
     height: 100vh !important;
+    margin: 0 !important; // override user agent stylesheet
+    padding: 0 !important; // override user agent stylesheet
 }
 
 //This is the main application container ID, includes the application header

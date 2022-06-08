@@ -10,6 +10,7 @@ import { HeaderComponent } from './commom/components/header/header.component';
 import { InfoComponent } from './commom/components/info/info.component';
 import { HomeComponent } from './home/home.component';
 import { HeatMapComponent } from './heat-map/heat-map.component';
+import { SampleChartComponent } from './commom/components/sample-chart/sample-chart.component';
 
 @NgModule({
     declarations: [
@@ -18,6 +19,7 @@ import { HeatMapComponent } from './heat-map/heat-map.component';
         InfoComponent,
         HomeComponent,
         HeatMapComponent,
+        SampleChartComponent,
     ],
     imports: [
         BrowserModule,
