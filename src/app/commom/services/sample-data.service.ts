@@ -1,9 +1,16 @@
 import { Injectable } from '@angular/core';
+import { HeatMap_Groups, HeatMap_Variables } from '../constants';
 
 export interface Item {
     name: string;
     value: number;
     abs: number;
+}
+
+export class HeatMapItem {
+    group!: string;
+    variable!: string;
+    value!: number;
 }
 
 @Injectable({
@@ -61,6 +68,23 @@ export class DataService {
                 abs: Math.abs(val),
             });
         }
+        return samples;
+    }
+
+    getHeatMapData(): HeatMapItem[] {
+        const samples: HeatMapItem[] = [];
+        const groups = Object.values(HeatMap_Groups);
+        const variables = Object.values(HeatMap_Variables);
+        groups.forEach((g) => {
+            variables.forEach((v) => {
+                const val = this.generateRandomValue(1, 100);
+                samples.push({
+                    group: g,
+                    variable: v,
+                    value: val,
+                });
+            });
+        });
         return samples;
     }
 }
