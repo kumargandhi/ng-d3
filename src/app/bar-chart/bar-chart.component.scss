@@ -9,21 +9,21 @@
         position: relative;
 
         ::ng-deep svg {
-            $axisLineColor: #6f7583;
+            $lineColor: #6f7583;
             outline: none;
 
             .axis {
                 path,
                 line {
                     fill: none;
-                    stroke: $axisLineColor;
+                    stroke: $lineColor;
                     stroke-width: 0.5;
                     shape-rendering: crispEdges;
                 }
 
                 text {
-                    fill: #646c7d;
-                    stroke: #646c7d;
+                    fill: #c3c3c3;
+                    stroke: #c3c3c3;
                     stroke-width: 0.5;
                 }
             }
