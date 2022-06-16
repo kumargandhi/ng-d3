@@ -9,8 +9,9 @@ import { AppComponent } from './app.component';
 import { HeaderComponent } from './commom/components/header/header.component';
 import { InfoComponent } from './commom/components/info/info.component';
 import { HomeComponent } from './home/home.component';
-import { HeatMapComponent } from './heat-map/heat-map.component';
+// import { HeatMapComponent } from './heat-map/heat-map.component';
 import { SampleChartComponent } from './commom/components/sample-chart/sample-chart.component';
+import { BarChartComponent } from './bar-chart/bar-chart.component';
 
 @NgModule({
     declarations: [
@@ -18,8 +19,9 @@ import { SampleChartComponent } from './commom/components/sample-chart/sample-ch
         HeaderComponent,
         InfoComponent,
         HomeComponent,
-        HeatMapComponent,
+        // HeatMapComponent,
         SampleChartComponent,
+        BarChartComponent,
     ],
     imports: [
         BrowserModule,

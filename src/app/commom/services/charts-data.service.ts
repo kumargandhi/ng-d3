@@ -1,22 +1,17 @@
 import { Injectable } from '@angular/core';
 import { HeatMap_Groups, HeatMap_Variables } from '../constants';
+import { DataItemInterface } from '../interfaces/data-item.interface';
 
-export interface Item {
-    name: string;
+export interface HeatMapItem {
+    group: string;
+    variable: string;
     value: number;
-    abs: number;
-}
-
-export class HeatMapItem {
-    group!: string;
-    variable!: string;
-    value!: number;
 }
 
 @Injectable({
     providedIn: 'root',
 })
-export class DataService {
+export class ChartsDataService {
     private readonly NAMES = [
         'A',
         'B',
@@ -47,7 +42,7 @@ export class DataService {
     ];
 
     private readonly MIN_ITEM = 10;
-    private readonly MAX_ITEM = 20;
+    private readonly MAX_ITEM = 26;
 
     private readonly MAX_VALUE = 100;
 
@@ -57,8 +52,8 @@ export class DataService {
         return Math.ceil(Math.random() * (end - start) + start);
     }
 
-    getData(): Item[] {
-        const nbItems = this.generateRandomValue(this.MIN_ITEM, this.MAX_ITEM);
+    getData(min: number = this.MIN_ITEM, max: number = this.MAX_VALUE): DataItemInterface[] {
+        const nbItems = this.generateRandomValue(min, max);
         const samples = [];
         for (let i = 0; i < nbItems; i++) {
             const val = this.generateRandomValue(1, this.MAX_VALUE);

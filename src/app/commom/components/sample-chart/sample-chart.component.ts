@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-import { Item, DataService } from '../../services/sample-data.service';
-import * as d3 from 'd3';
+import { ChartsDataService } from '../../services/charts-data.service';
+import * as d3 from 'd3v6';
+import { DataItemInterface } from '../../interfaces/data-item.interface';
 
 @Component({
     selector: 'app-sample-chart',
@@ -10,11 +11,9 @@ import * as d3 from 'd3';
 })
 export class SampleChartComponent implements OnInit {
     get height(): number {
-        // return parseInt(d3.select('body').style('height'), 10);
         return 300;
     }
     get width(): number {
-        // return parseInt(d3.select('body').style('width'), 10);
         return 300;
     }
     radius = 0;
@@ -27,9 +26,9 @@ export class SampleChartComponent implements OnInit {
     private svg: any;
     private mainContainer: any;
     // Data
-    dataSource: Item[];
+    dataSource: DataItemInterface[];
 
-    constructor(private service: DataService) {
+    constructor(private service: ChartsDataService) {
         this.dataSource = this.service.getData();
     }
 

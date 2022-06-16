@@ -7,6 +7,10 @@ export const Header_Menu = [
         label: 'Heat map',
         routerLink: ['heat-map'],
     },
+    {
+        label: 'Bar chart',
+        routerLink: ['bar-chart'],
+    },
 ];
 
 export const HEATMAP_COLOR_RANGE = [
