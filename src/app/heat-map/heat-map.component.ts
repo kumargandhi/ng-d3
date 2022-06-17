@@ -2,7 +2,8 @@ import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import * as d3 from 'd3v6';
 import * as _ from 'lodash';
 import {
-    HEATMAP_COLOR_RANGE,
+    HeatMap_ColorRange,
+    HeatMap_DomainRange,
     HeatMap_Groups,
     HeatMap_Variables,
 } from '../commom/constants';
@@ -16,7 +17,7 @@ import { ChartsDataService } from '../commom/services/charts-data.service';
 })
 export class HeatMapComponent implements OnInit {
     @ViewChild('chartContainer', { static: true }) chartContainer: ElementRef;
-    @Input() chartId: string = 'heatMap';
+    @Input() chartId: string = 'heatmap';
     @Input() width: number = 600;
     @Input() height: number = 450;
     _chartData: HeatMapDataItemInterface[];
@@ -42,12 +43,16 @@ export class HeatMapComponent implements OnInit {
 
     createHeatmap() {
         // set the dimensions and margins of the graph
-        this.width = this.chartContainer.nativeElement.getBoundingClientRect().width;
-        const widgetWidth = (this.chartContainer.nativeElement.getBoundingClientRect().width * 60) / 100;
+        this.width =
+            this.chartContainer.nativeElement.getBoundingClientRect().width;
+        const widgetWidth =
+            (this.chartContainer.nativeElement.getBoundingClientRect().width *
+                60) /
+            100;
         let heatMapHeight = Math.round(widgetWidth / 3.167);
         this.width = widgetWidth - this.margin.left - this.margin.right;
         this.height = heatMapHeight - this.margin.top - this.margin.bottom;
-        const legendElementWidth = Math.floor(this.width / 24) + 50;
+        const legendWidth = 80;
 
         /**
          * Remove all the elements in d3 charts if already exist
@@ -119,8 +124,8 @@ export class HeatMapComponent implements OnInit {
 
         const myColor = d3
             .scaleLinear<string>()
-            .range(HEATMAP_COLOR_RANGE)
-            //.domain(groupNames);
+            .range(HeatMap_ColorRange)
+            .domain(HeatMap_DomainRange);
 
         // add the squares
         const cards = svg
@@ -152,17 +157,10 @@ export class HeatMapComponent implements OnInit {
             })
             .style('stroke-width', 2)
             .style('stroke', 'none')
-            .style('opacity', 0)
+            .style('opacity', 1)
             .on('mouseover', mouseover)
             .on('mouseout', mouseout)
             .on('mouseleave', mouseout);
-
-        setTimeout(() => {
-            d3.transition()
-                .selectAll('rect')
-                .duration(1000)
-                .style('opacity', 1);
-        }, 100);
 
         // append the legend svg object to the body of the page
         const legend = d3
@@ -171,26 +169,27 @@ export class HeatMapComponent implements OnInit {
             .attr(
                 'transform',
                 'translate(' +
-                    (this.width -
-                        HEATMAP_COLOR_RANGE.length * legendElementWidth +
-                        this.margin.left) +
-                    ',' +
-                    (this.margin.top - 20) +
-                    ')'
+                    +(
+                        this.width -
+                        HeatMap_ColorRange.length * legendWidth +
+                        this.margin.left
+                    ) +
+                    ',0)'
             )
-            .attr('width', legendElementWidth * HEATMAP_COLOR_RANGE.length)
+            .attr('width', legendWidth * HeatMap_ColorRange.length)
             .attr('height', 35);
 
-        const domainRange: string[] =
-            groupNames.map((item, index, items) => {
+        const domainRange: string[] = HeatMap_DomainRange.map(
+            (item, index, items) => {
                 const domain = '' + item;
                 if (index === 0) {
                     return '>' + domain;
-                } else if (index === (items.length - 1)) {
+                } else if (index === items.length - 1) {
                     return '<' + domain;
                 }
                 return '';
-            });
+            }
+        );
         legend
             .selectAll()
             .data(domainRange, function (d) {
@@ -201,17 +200,17 @@ export class HeatMapComponent implements OnInit {
             .attr('class', 'g-legend')
             .append('rect')
             .attr('x', function (d, i) {
-                return legendElementWidth * i;
+                return legendWidth * i;
             })
             .attr('y', 20)
             .attr('rx', 0)
             .attr('ry', 0)
-            .attr('width', legendElementWidth)
-            .style('width', '' + legendElementWidth + 'px')
+            .attr('width', legendWidth)
+            .style('width', '' + legendWidth + 'px')
             .attr('height', 10)
             .style('height', '10px')
             .style('fill', function (d, i) {
-                return '' + HEATMAP_COLOR_RANGE[i];
+                return '' + HeatMap_ColorRange[i];
             });
 
         legend
@@ -225,7 +224,7 @@ export class HeatMapComponent implements OnInit {
                 if (i === 0) {
                     return 0;
                 }
-                return legendElementWidth * i;
+                return legendWidth * i;
             })
             .attr('y', 10)
             .style('font-size', 11)
