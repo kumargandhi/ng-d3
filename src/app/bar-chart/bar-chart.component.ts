@@ -55,7 +55,6 @@ export class BarChartComponent implements OnInit {
         private dataService: ChartsDataService
     ) {
         this._chartData = dataService.getData(22);
-        this._cd.markForCheck();
     }
 
     ngOnInit(): void {

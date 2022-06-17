@@ -1,12 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HeatMap_Groups, HeatMap_Variables } from '../constants';
 import { DataItemInterface } from '../interfaces/data-item.interface';
-
-export interface HeatMapItem {
-    group: string;
-    variable: string;
-    value: number;
-}
+import { HeatMapDataItemInterface } from '../interfaces/heat-map-data-item.interface';
 
 @Injectable({
     providedIn: 'root',
@@ -66,8 +61,8 @@ export class ChartsDataService {
         return samples;
     }
 
-    getHeatMapData(): HeatMapItem[] {
-        const samples: HeatMapItem[] = [];
+    getHeatMapData(): HeatMapDataItemInterface[] {
+        const samples: HeatMapDataItemInterface[] = [];
         const groups = Object.values(HeatMap_Groups);
         const variables = Object.values(HeatMap_Variables);
         groups.forEach((g) => {

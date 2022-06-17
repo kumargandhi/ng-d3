@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import * as d3 from 'd3v6';
 import * as _ from 'lodash';
 import {
@@ -7,7 +7,9 @@ import {
     HeatMap_Variables,
 } from '../commom/constants';
 import { AppWindowInfo, getWindowInfo } from '../commom/generics';
-import { ChartsDataService, HeatMapItem } from '../commom/services/charts-data.service';
+import { DataItemInterface } from '../commom/interfaces/data-item.interface';
+import { HeatMapDataItemInterface } from '../commom/interfaces/heat-map-data-item.interface';
+import { ChartsDataService } from '../commom/services/charts-data.service';
 
 @Component({
     selector: 'app-heat-map',
@@ -15,13 +17,25 @@ import { ChartsDataService, HeatMapItem } from '../commom/services/charts-data.s
     styleUrls: ['./heat-map.component.scss'],
 })
 export class HeatMapComponent implements OnInit {
+    @ViewChild('chartContainer', { static: true }) chartContainer: ElementRef;
+    @Input() chartId: string = 'heatMap';
+    @Input() width: number = 600;
+    @Input() height: number = 450;
+    _chartData: HeatMapDataItemInterface[];
+
+    private margin = { top: 20, right: 20, bottom: 35, left: 40 };
+    private _chart = {
+        svg: null,
+        mainContainer: null,
+    };
+    
     @ViewChild('mapDiv') mapDiv: any;
     @ViewChild('parentDiv') parentDiv: any;
 
     tooltipDiv: any;
     element!: HTMLElement;
     heatMapData = {
-        heatMapGraphId: 'heatMapSample',
+        heatMapGraphId: 'heatMap',
         daysCount: 30,
         datesStrAsPerRange: '',
         data: [],
@@ -29,7 +43,6 @@ export class HeatMapComponent implements OnInit {
     };
 
     constructor(private service: ChartsDataService) {
-        //@ts-ignore
         this.heatMapData.data = service.getHeatMapData();
     }
 
