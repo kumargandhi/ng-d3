@@ -58,6 +58,7 @@ export class BarChartComponent implements OnInit {
     }
 
     ngOnInit(): void {
+        window.addEventListener('resize', this.resize.bind(this));
         this.initChart();
         this.draw();
         this._cd.markForCheck();
@@ -151,5 +152,11 @@ export class BarChartComponent implements OnInit {
             .attr('y', (d) => this._chart.yScale(d.value))
             .attr('width', this._chart.xScale.bandwidth())
             .attr('height', (d) => calcBarHeight(d.value));
+    }
+
+    private resize() {
+        this.setSVGDimensions();
+        this.draw();
+        this._cd.markForCheck();
     }
 }
