@@ -3,8 +3,9 @@
 Angular with [d3.js](https://d3js.org/) code samples.
 
 ## Available charts
-- Bar chart
-- Heatmap chart
+
+-   Bar chart
+-   Heatmap chart
 
 `Note:` My samples are only to demonstrate the capabilities of d3.js in Angular application. Please do more R&D before starting to use them. Thanks.
 

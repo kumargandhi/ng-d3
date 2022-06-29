@@ -6,6 +6,7 @@ import {
     ChangeDetectorRef,
     ViewChild,
     ElementRef,
+    OnDestroy,
 } from '@angular/core';
 import * as d3 from 'd3v6';
 import cloneDeep from 'lodash/cloneDeep';
@@ -18,7 +19,7 @@ import { ChartsDataService } from '../commom/services/charts-data.service';
     styleUrls: ['./bar-chart.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BarChartComponent implements OnInit {
+export class BarChartComponent implements OnInit, OnDestroy {
     @ViewChild('chartContainer', { static: true }) chartContainer: ElementRef;
     @Input() chartId: string = 'bar';
     @Input() width: number = 600;
@@ -36,6 +37,8 @@ export class BarChartComponent implements OnInit {
         y: null,
         mainContainer: null,
         bars: null,
+        tooltip: null,
+        total: 0,
     };
 
     get barWidth(): number {
@@ -55,6 +58,10 @@ export class BarChartComponent implements OnInit {
         private dataService: ChartsDataService
     ) {
         this._chartData = dataService.getData(22);
+        this._chart.total = this._chartData.reduce(
+            (sum, it) => (sum += it.abs),
+            0
+        );
     }
 
     ngOnInit(): void {
@@ -77,6 +84,9 @@ export class BarChartComponent implements OnInit {
     }
 
     private initChart() {
+        // Remove elements if already exist
+        d3.select('#barTooltip').selectAll('*').remove();
+
         this._chart.svg = d3.select('#bar').select('svg');
         this._chart.xScale = d3.scaleBand();
         this._chart.yScale = d3.scaleLinear();
@@ -93,6 +103,12 @@ export class BarChartComponent implements OnInit {
         this._chart.x = this._chart.mainContainer
             .append('g')
             .attr('class', 'axis axis--x');
+        this._chart.tooltip = d3
+            .select('body')
+            .append('div')
+            .attr('id', 'barTooltip')
+            .style('display', 'none')
+            .style('opacity', 0);
     }
 
     private setSVGDimensions() {
@@ -132,6 +148,23 @@ export class BarChartComponent implements OnInit {
     }
 
     private drawBars() {
+        const mousemove = function (s, d) {
+            const percent =
+                (Math.abs(d.abs / this._chart.total) * 100).toFixed(2) + '%';
+            this._chart.tooltip
+                .style('top', s.layerY + 15 + 'px')
+                .style('left', s.layerX + 'px')
+                .style('display', 'block')
+                .style('opacity', 1)
+                .html(
+                    `Name: ${d.name}<br>Value: ${d.value}<br>Share: ${percent}`
+                );
+        };
+
+        const mouseout = function (s, d) {
+            this._chart.tooltip.style('display', 'none').style('opacity', 0);
+        };
+
         const calcBarY = (yPos) => {
             return !yPos ? this._chart.yScale(0) - 1 : this._chart.yScale(yPos);
         };
@@ -151,12 +184,18 @@ export class BarChartComponent implements OnInit {
             .attr('x', (d) => this._chart.xScale(d.name))
             .attr('y', (d) => this._chart.yScale(d.value))
             .attr('width', this._chart.xScale.bandwidth())
-            .attr('height', (d) => calcBarHeight(d.value));
+            .attr('height', (d) => calcBarHeight(d.value))
+            .on('mouseover', mousemove.bind(this))
+            .on('mouseout', mouseout.bind(this));
     }
 
     private resize() {
         this.setSVGDimensions();
         this.draw();
         this._cd.markForCheck();
+    }
+
+    ngOnDestroy(): void {
+        d3.selectAll('#barTooltip').remove();
     }
 }

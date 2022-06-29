@@ -47,7 +47,10 @@ export class ChartsDataService {
         return Math.ceil(Math.random() * (end - start) + start);
     }
 
-    getData(min: number = this.MIN_ITEM, max: number = this.MAX_VALUE): DataItemInterface[] {
+    getData(
+        min: number = this.MIN_ITEM,
+        max: number = this.MAX_VALUE
+    ): DataItemInterface[] {
         const nbItems = this.generateRandomValue(min, max);
         const samples = [];
         for (let i = 0; i < nbItems; i++) {
