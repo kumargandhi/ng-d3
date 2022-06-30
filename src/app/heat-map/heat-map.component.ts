@@ -7,6 +7,7 @@ import {
     HeatMap_Groups,
     HeatMap_Variables,
 } from '../commom/constants';
+import { AppWindowInfo, getWindowInfo } from '../commom/generics';
 import { HeatMapDataItemInterface } from '../commom/interfaces/heat-map-data-item.interface';
 import { ChartsDataService } from '../commom/services/charts-data.service';
 
@@ -18,6 +19,7 @@ import { ChartsDataService } from '../commom/services/charts-data.service';
 export class HeatMapComponent implements OnInit {
     @ViewChild('chartContainer', { static: true }) chartContainer: ElementRef;
     @Input() chartId: string = 'heatmap';
+    @Input() tooltipId: string = 'heatMapTooltip';
     @Input() width: number = 600;
     @Input() height: number = 450;
     _chartData: HeatMapDataItemInterface[];
@@ -29,6 +31,7 @@ export class HeatMapComponent implements OnInit {
         data: [],
         daysCount: 30,
         datesStrAsPerRange: '',
+        tooltip: null,
     };
 
     element!: HTMLElement;
@@ -42,6 +45,8 @@ export class HeatMapComponent implements OnInit {
     }
 
     createHeatmap() {
+        // Remove elements if already exist
+        d3.select(`#${this.tooltipId}`).selectAll('*').remove();
         // set the dimensions and margins of the graph
         this.width =
             this.chartContainer.nativeElement.getBoundingClientRect().width;
@@ -64,9 +69,15 @@ export class HeatMapComponent implements OnInit {
             .selectAll('*')
             .remove();
 
+        // Create the heatmap tooltip
+        this._chart.tooltip = d3
+            .select('body')
+            .append('div')
+            .attr('id', `${this.tooltipId}`);
+
         /**
          * Mouse over function handler for the treemap nodes
-         * Here we highlight the circle with the box shadow css
+         * Here we highlight the square with a stroke
          */
         const mouseover = function () {
             d3.select(this).style('stroke', 'black');
@@ -76,7 +87,44 @@ export class HeatMapComponent implements OnInit {
          * Mouse out handler
          */
         const mouseout = function () {
+            this._chart.tooltip.style('display', 'none').style('opacity', 0);
+        };
+
+        /**
+         * Mouse leave handler
+         * Here we remove the highlight added to the square
+         */
+         const mouseleave = function () {
             d3.select(this).style('stroke', 'none');
+        };
+
+        /**
+         * Mouse move handler
+         */
+        const mousemove = function (event, d) {
+            let xPosition = event.pageX + 5;
+            let yPosition = event.pageY + 5;
+            const windowInfo: AppWindowInfo = getWindowInfo();
+            if (yPosition + 150 > windowInfo.availableHeight) {
+                yPosition = yPosition - 70;
+            }
+            if (xPosition + 150 > windowInfo.windowWidth) {
+                xPosition = xPosition - 160;
+                let topPadding = 10;
+                yPosition = yPosition - topPadding;
+            }
+            this._chart.tooltip
+                .style('left', xPosition + 'px')
+                .style('top', yPosition + 'px');
+            /**
+             * Remove all the elements in the tooltip if already exist
+             */
+             this._chart.tooltip.selectAll('*').remove();
+
+             this._chart.tooltip
+                .html("Value: " + d.value);
+
+            this._chart.tooltip.style('display', 'block').style('opacity', 1);
         };
 
         // append the svg object to the body of the page
@@ -159,8 +207,9 @@ export class HeatMapComponent implements OnInit {
             .style('stroke', 'none')
             .style('opacity', 1)
             .on('mouseover', mouseover)
-            .on('mouseout', mouseout)
-            .on('mouseleave', mouseout);
+            .on('mousemove', mousemove.bind(this))
+            .on('mouseout', mouseout.bind(this))
+            .on('mouseleave', mouseleave);
 
         // append the legend svg object to the body of the page
         const legend = d3

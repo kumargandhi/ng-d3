@@ -40,10 +40,24 @@ body {
     text-align: center;
     width: 120px;
     padding: 5px;
-    font: 12px sans-serif;
-    background: red;
+    background: $theme-primary;
     color: white;
     border: 0px;
+    border-radius: 8px;
+    pointer-events: none;
+    vertical-align: middle;
+    z-index: 10;
+}
+
+#heatMapTooltip {
+    opacity: 1;
+    position: absolute;
+    text-align: center;
+    width: 70px;
+    padding: 5px;
+    background: $theme-primary;
+    color: #fff;
+    border: 1px solid #000;
     border-radius: 8px;
     pointer-events: none;
     vertical-align: middle;
