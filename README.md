@@ -6,6 +6,7 @@ Angular with [d3.js](https://d3js.org/) code samples.
 
 -   Bar chart
 -   Heatmap chart
+-   Pie chart
 
 `Note:` My samples are only to demonstrate the capabilities of d3.js in Angular application. Please do more R&D before starting to use them. Thanks.
 
@@ -18,6 +19,7 @@ Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app w
 ## Code scaffolding
 
 Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`
+- ng g c pie-chart
 
 ## Build
 
