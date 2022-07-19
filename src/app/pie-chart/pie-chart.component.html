@@ -1,5 +1,38 @@
 <div id="page-container" class="container-fluid chart" #chartContainer>
     <div class="chart__main" id="pie2">
         <svg></svg>
+        <form class="needs-validation data-container" [formGroup]="form">
+            <div class="row p-3 inputs-form">
+                <div class="col-md-3">
+                    <label for="innerRadius" class="form-label">Inner radius:</label>
+                    <input
+                        type="text"
+                        class="form-control"
+                        id="innerRadius"
+                        placeholder="Enter name..."
+                        formControlName="innerRadius"
+                        required
+                    />
+                    <div
+                        class="invalid-feedback"
+                        *ngIf="form.controls['innerRadius'].errors?.required"
+                    >
+                        Inner radius cannot be empty
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <button
+                        class="btn btn-primary float-end"
+                        type="submit"
+                        (click)="reset()"
+                    >
+                        Refresh
+                    </button>
+                </div>
+            </div>
+        </form>
     </div>
+    
 </div>

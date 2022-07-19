@@ -1,11 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy,
+    ChangeDetectorRef, } from '@angular/core';
 import { DataItemInterface } from '../commom/interfaces/data-item.interface';
 import { ChartsDataService } from '../commom/services/charts-data.service';
 import * as d3 from 'd3v6';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 @Component({
     selector: 'app-pie-chart',
     templateUrl: './pie-chart.component.html',
     styleUrls: ['./pie-chart.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PieChartComponent implements OnInit {
     get height(): number {
@@ -23,10 +26,17 @@ export class PieChartComponent implements OnInit {
     // Drawing containers
     private svg: any;
     private mainContainer: any;
+    private outerRadius: number;
+    private innerRadius: number = 0.7;
     // Data
     dataSource: DataItemInterface[];
 
-    constructor(private service: ChartsDataService) {
+    form: FormGroup;
+
+    constructor(private service: ChartsDataService, private _fb: FormBuilder, private _cd: ChangeDetectorRef) {
+        this.form = this._fb.group({
+            innerRadius: [this.innerRadius, Validators.compose([Validators.required])],
+        });
         this.dataSource = this.service.getData(5, 10);
     }
 
@@ -45,7 +55,8 @@ export class PieChartComponent implements OnInit {
     }
 
     private setSVGDimensions() {
-        this.radius = Math.min(this.width, this.height) / 2;
+        this.radius = this.outerRadius = Math.min(this.width, this.height) / 2;
+        this.innerRadius = this.radius * this.innerRadius;
         this.svg.attr('width', 2 * this.radius).attr('height', 2 * this.radius);
         this.svg
             .select('g')
@@ -63,8 +74,8 @@ export class PieChartComponent implements OnInit {
     private setArcs() {
         this.arc = d3
             .arc()
-            .outerRadius(this.radius)
-            .innerRadius(this.radius * 0.75);
+            .outerRadius(this.outerRadius)
+            .innerRadius(this.innerRadius);
     }
 
     private drawSlices() {
@@ -78,5 +89,11 @@ export class PieChartComponent implements OnInit {
             .append('path')
             .attr('d', this.arc);
         this.slices.attr('fill', (d: any, i: any) => this.color(i));
+    }
+
+    reset() {
+        const { innerRadius } = this.form.controls;
+        this.innerRadius = this.radius * innerRadius.value;
+        this.draw();
     }
 }
