@@ -35,6 +35,7 @@ export class PieChartComponent implements OnInit {
 
     constructor(private service: ChartsDataService, private _fb: FormBuilder, private _cd: ChangeDetectorRef) {
         this.form = this._fb.group({
+            outerRadius: [this.outerRadius, Validators.compose([Validators.required])],
             innerRadius: [this.innerRadius, Validators.compose([Validators.required])],
         });
         this.dataSource = this.service.getData(5, 10);
@@ -52,10 +53,13 @@ export class PieChartComponent implements OnInit {
             .sort(null)
             .value((d: any) => d.abs);
         this.draw();
+        this._cd.markForCheck();
     }
 
     private setSVGDimensions() {
         this.radius = this.outerRadius = Math.min(this.width, this.height) / 2;
+        const { outerRadius } = this.form.controls;
+        outerRadius.setValue(this.outerRadius);
         this.innerRadius = this.radius * this.innerRadius;
         this.svg.attr('width', 2 * this.radius).attr('height', 2 * this.radius);
         this.svg
@@ -92,8 +96,10 @@ export class PieChartComponent implements OnInit {
     }
 
     reset() {
-        const { innerRadius } = this.form.controls;
+        const { innerRadius, outerRadius } = this.form.controls;
         this.innerRadius = this.radius * innerRadius.value;
+        this.outerRadius = outerRadius.value;
         this.draw();
+        this._cd.markForCheck();
     }
 }

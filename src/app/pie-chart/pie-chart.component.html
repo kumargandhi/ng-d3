@@ -3,13 +3,13 @@
         <svg></svg>
         <form class="needs-validation data-container" [formGroup]="form">
             <div class="row p-3 inputs-form">
-                <div class="col-md-3">
+                <div class="col-12 pb-2">
                     <label for="innerRadius" class="form-label">Inner radius:</label>
                     <input
-                        type="text"
+                        type="number"
                         class="form-control"
                         id="innerRadius"
-                        placeholder="Enter name..."
+                        placeholder="Enter inner radius..."
                         formControlName="innerRadius"
                         required
                     />
@@ -20,9 +20,26 @@
                         Inner radius cannot be empty
                     </div>
                 </div>
+                <div class="col-12">
+                    <label for="outerRadius" class="form-label">Outer radius:</label>
+                    <input
+                        type="number"
+                        class="form-control"
+                        id="outerRadius"
+                        placeholder="Enter outer radius..."
+                        formControlName="outerRadius"
+                        required
+                    />
+                    <div
+                        class="invalid-feedback"
+                        *ngIf="form.controls['outerRadius'].errors?.required"
+                    >
+                        Outer radius cannot be empty
+                    </div>
+                </div>
             </div>
-            <div class="row">
-                <div class="col-md-3">
+            <div class="row p-3">
+                <div class="col-12">
                     <button
                         class="btn btn-primary float-end"
                         type="submit"
