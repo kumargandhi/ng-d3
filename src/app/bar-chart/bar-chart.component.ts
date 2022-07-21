@@ -178,6 +178,7 @@ export class BarChartComponent implements OnInit, OnDestroy {
             .data(this.chartData)
             .enter()
             .append('rect')
+            .style('fill', '#C3012E')
             .attr('class', 'chart-bar');
 
         this._chart.bars
