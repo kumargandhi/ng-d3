@@ -55,7 +55,7 @@ export class BarChartComponent implements OnInit, OnDestroy {
 
     constructor(
         private _cd: ChangeDetectorRef,
-        private dataService: ChartsDataService
+        dataService: ChartsDataService
     ) {
         this._chartData = dataService.getData(22);
         this._chart.total = this._chartData.reduce(

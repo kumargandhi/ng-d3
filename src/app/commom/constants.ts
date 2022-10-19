@@ -15,6 +15,10 @@ export const Header_Menu = [
         label: 'Pie chart',
         routerLink: ['pie-chart'],
     },
+    {
+        label: 'Line chart',
+        routerLink: ['line-chart'],
+    },
 ];
 
 export const HeatMap_ColorRange = [
