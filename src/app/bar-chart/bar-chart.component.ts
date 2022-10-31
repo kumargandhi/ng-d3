@@ -85,7 +85,7 @@ export class BarChartComponent implements OnInit, OnDestroy {
 
     private initChart() {
         // Remove elements if already exist
-        d3.select('#barTooltip').selectAll('*').remove();
+        d3.select('#chartTooltip').selectAll('*').remove();
 
         this._chart.svg = d3.select('#bar').select('svg');
         this._chart.xScale = d3.scaleBand();
@@ -106,7 +106,7 @@ export class BarChartComponent implements OnInit, OnDestroy {
         this._chart.tooltip = d3
             .select('body')
             .append('div')
-            .attr('id', 'barTooltip')
+            .attr('id', 'chartTooltip')
             .style('display', 'none')
             .style('opacity', 0);
     }
@@ -197,6 +197,6 @@ export class BarChartComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy(): void {
-        d3.selectAll('#barTooltip').remove();
+        d3.selectAll('#chartTooltip').remove();
     }
 }
