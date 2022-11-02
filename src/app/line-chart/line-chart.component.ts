@@ -19,7 +19,7 @@ import { LINE_CHART_DATA } from './data';
 export class LineChartComponent implements OnInit, OnDestroy {
     private width = 700;
     private height = 400;
-    private margin = { top: 20, right: 20, bottom: 35, left: 40 };
+    private margin = { top: 20, right: 20, bottom: 35, left: 20 };
 
     private _chart = {
         svg: null,
@@ -59,8 +59,8 @@ export class LineChartComponent implements OnInit, OnDestroy {
         d3.select('#chartTooltip').selectAll('*').remove();
 
         this._chart.svg = d3
-            .select('.chart')
-            .append('svg')
+            .select('#line')
+            .select('svg')
             .attr('height', this.height + this.margin.top);
         this._chart.svgInner = this._chart.svg
             .append('g')
@@ -84,7 +84,7 @@ export class LineChartComponent implements OnInit, OnDestroy {
 
         this._chart.xScale = d3
             .scaleTime()
-            .domain(d3.extent(this.data, (d) => new Date(d.timestamp)));
+            .domain(d3.extent(this.data, (d) => new Date(d.date)));
 
         this._chart.xAxis = this._chart.svgInner
             .append('g')
@@ -129,29 +129,28 @@ export class LineChartComponent implements OnInit, OnDestroy {
         this._chart.yAxis.call(yAxis);
 
         const mousemove = function (s, d) {
-            //let x0 = this._chart.xScale.invert(s.x);
             let bisectDate = d3.bisector((t) => {
-                //console.log('' + t);
-                return t['timestamp'];
+                return new Date(t['date']);
             }).left;
             let x0 = this._chart.xScale.invert(s.x),
                 i = bisectDate(this.data, x0, 1),
                 d0 = this.data[i - 1],
                 d1 = this.data[i],
                 dd = x0 - d0.date > d1.date - x0 ? d1 : d0;
-            // console.log('' + d + ', ' + x0);
             if (!dd) {
                 return;
             }
-            console.log('' + this._chart.xScale(dd.timestamp));
+            console.log('' + this._chart.xScale(dd.date));
             this._chart.tooltip
-                .style('top', s.layerY + 15 + 'px')
-                .style('left', s.layerX + 'px')
-                // .attr("transform", "translate(" + this._chart.xScale(dd.timestamp) + "," + this._chart.yScale(dd.value) + ")")
+                // .style('top', s.layerY + 15 + 'px')
+                // .style('left', s.layerX + 'px')
+                .style('left', this._chart.xScale(new Date(dd.date)) + 'px')
+                .style('top', this._chart.yScale(dd.value) + 20 + 'px')
+                // .attr("transform", "translate(" + this._chart.xScale(new Date(dd.date)) + "px," + this._chart.yScale(dd.value) + "px)")
                 .style('display', 'block')
                 .style('opacity', 1)
                 .html(
-                    `Date: ${dd.timestamp}<br>Value: ${dd.value}`
+                    `Date: ${dd.date}<br>Value: ${dd.value}`
                 );
         };
 
@@ -175,7 +174,7 @@ export class LineChartComponent implements OnInit, OnDestroy {
             .curve(d3.curveMonotoneX);
 
         const points: [number, number][] = this.data.map((d) => [
-            this._chart.xScale(new Date(d.timestamp)),
+            this._chart.xScale(new Date(d.date)),
             this._chart.yScale(d.value),
         ]);
 
