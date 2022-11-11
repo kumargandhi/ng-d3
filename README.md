@@ -1,37 +1,35 @@
-# NgD3
+# [Angular](https://angular.io/) application with [d3.js](https://d3js.org/) code samples!
 
-Angular with [d3.js](https://d3js.org/) code samples.
+> **Available charts**
+- Bar chart
+- Heatmap chart
+- Pie chart
+- Line chart
 
-## Available charts
+![ng-d3js](https://kumargandhi.github.io/assets/ng-d3js/NgD3.png)
 
--   Bar chart
--   Heatmap chart
--   Pie chart
-
-`Note:` My samples are only to demonstrate the capabilities of d3.js in Angular application. Please do more R&D before starting to use them. Thanks.
+Checkout [d3.js](https://d3js.org/) library for more info and I would recommend to explore it!. 
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 12.2.6.
 
-## Development server
+## Live URL :-
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+> [ng-d3js](https://ng-d3js.netlify.app/)
 
-## Code scaffolding
+**OR your can do the following to run in your local machine**
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`
-- ng g c pie-chart
+## Scripts
 
-## Build
+Install node modules
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+#### `npm install`
 
-## Running unit tests
+In the project directory, you can run:
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+#### `npm start`
 
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+Runs the app in the development mode.<br>
+Open [http://localhost:4200](http://localhost:4200) to view it in the browser.
 
 ## Further help
 
