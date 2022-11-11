@@ -1,3 +1,5 @@
+@import './variables.scss';
+
 .chart {
     display: flex;
     flex-direction: column;
@@ -9,7 +11,9 @@
         position: relative;
 
         ::ng-deep svg {
-            $lineColor: #6f7583;
+            $lineColor: $theme-gray-darker;
+            $textColor: $theme-gray-dark;
+            $focusColor: $theme-base;
             outline: none;
 
             .axis {
@@ -17,14 +21,12 @@
                 line {
                     fill: none;
                     stroke: $lineColor;
-                    stroke-width: 0.5;
+                    stroke-width: 1;
                     shape-rendering: crispEdges;
                 }
 
                 text {
-                    fill: #c3c3c3;
-                    stroke: #c3c3c3;
-                    stroke-width: 0.5;
+                    color: $textColor;
                 }
             }
 
@@ -32,6 +34,10 @@
                 outline: none;
                 stroke: transparent !important;
                 fill-opacity: 1 !important;
+            }
+
+            .focus circle {
+                fill: $focusColor;
             }
         }
     }

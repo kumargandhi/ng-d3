@@ -9,6 +9,7 @@ import {
 } from '@angular/core';
 import * as d3 from 'd3v6';
 import { LINE_CHART_DATA } from './data';
+import isEmpty from 'lodash/isEmpty';
 
 @Component({
     selector: 'app-line-chart',
@@ -29,7 +30,8 @@ export class LineChartComponent implements OnInit, OnDestroy {
         xScale: null,
         yScale: null,
         lineGroup: null,
-        tooltip: null
+        tooltip: null,
+        focus: null
     };
 
     data = LINE_CHART_DATA;
@@ -79,7 +81,7 @@ export class LineChartComponent implements OnInit, OnDestroy {
 
         this._chart.yAxis = this._chart.svgInner
             .append('g')
-            .attr('id', 'y-axis')
+            .attr('class', 'axis axis--y')
             .style('transform', 'translate(' + this.margin.left + 'px,  0)');
 
         this._chart.xScale = d3
@@ -88,7 +90,7 @@ export class LineChartComponent implements OnInit, OnDestroy {
 
         this._chart.xAxis = this._chart.svgInner
             .append('g')
-            .attr('id', 'x-axis')
+            .attr('class', 'axis axis--x')
             .style(
                 'transform',
                 'translate(0, ' + (this.height - 2 * this.margin.left) + 'px)'
@@ -128,6 +130,13 @@ export class LineChartComponent implements OnInit, OnDestroy {
 
         this._chart.yAxis.call(yAxis);
 
+        this._chart.focus = this._chart.svg.append("g")
+            .attr("class", "focus")
+            .style("display", "none");
+
+        this._chart.focus.append("circle")
+            .attr("r", 5);
+
         const mousemove = function (s, d) {
             let bisectDate = d3.bisector((t) => {
                 return new Date(t['date']);
@@ -137,25 +146,26 @@ export class LineChartComponent implements OnInit, OnDestroy {
                 d0 = this.data[i - 1],
                 d1 = this.data[i],
                 dd = x0 - d0.date > d1.date - x0 ? d1 : d0;
-            if (!dd) {
+            if (!dd || isEmpty(dd)) {
                 return;
             }
-            console.log('' + this._chart.xScale(dd.date));
             this._chart.tooltip
                 // .style('top', s.layerY + 15 + 'px')
                 // .style('left', s.layerX + 'px')
                 .style('left', this._chart.xScale(new Date(dd.date)) + 'px')
-                .style('top', this._chart.yScale(dd.value) + 20 + 'px')
+                .style('top', this._chart.yScale(dd.value) + this.margin.top + 'px')
                 // .attr("transform", "translate(" + this._chart.xScale(new Date(dd.date)) + "px," + this._chart.yScale(dd.value) + "px)")
                 .style('display', 'block')
                 .style('opacity', 1)
                 .html(
                     `Date: ${dd.date}<br>Value: ${dd.value}`
                 );
+            this._chart.focus.attr("transform", "translate(" + (this._chart.xScale(new Date(dd.date)) + this.margin.left) + "," + (this._chart.yScale(dd.value) + this.margin.top) + ")");
         };
 
         const mouseout = function (s, d) {
             this._chart.tooltip.style('display', 'none').style('opacity', 0);
+            this._chart.focus.style("display", "none");
         };
 
         this._chart.svg.append("rect")
@@ -164,6 +174,7 @@ export class LineChartComponent implements OnInit, OnDestroy {
             .attr("height", this.height)
             .style("fill", 'none')
             .style("pointer-events", 'all')
+            .on("mouseover", () => { this._chart.focus.style("display", null); })
             .on("mouseout", mouseout.bind(this))
             .on("mousemove", mousemove.bind(this));
 
