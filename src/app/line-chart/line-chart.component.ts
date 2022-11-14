@@ -100,9 +100,10 @@ export class LineChartComponent implements OnInit, OnDestroy {
             .append('g')
             .append('path')
             .attr('id', 'line')
+            .attr('class', 'chart-line')
             .style('fill', 'none')
-            .style('stroke', 'red')
-            .style('stroke-width', '2px');
+            // .style('stroke', 'red')
+            .style('stroke-width', '1.5px');
 
         this._chart.tooltip = d3
             .select('body')

@@ -14,6 +14,8 @@
             $lineColor: $theme-gray-darker;
             $textColor: $theme-gray-dark;
             $focusColor: $theme-base;
+            $line-stroke: $theme-olive;
+            $bar-fill: $theme-olive;
             outline: none;
 
             .axis {
@@ -30,9 +32,14 @@
                 }
             }
 
+            .chart-line {
+                stroke: $line-stroke;
+            }
+
             .chart-bar {
                 outline: none;
                 stroke: transparent !important;
+                fill: $bar-fill;
                 fill-opacity: 1 !important;
             }
 
