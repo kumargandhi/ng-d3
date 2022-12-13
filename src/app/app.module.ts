@@ -14,6 +14,7 @@ import { SampleChartComponent } from './commom/components/sample-chart/sample-ch
 import { BarChartComponent } from './bar-chart/bar-chart.component';
 import { PieChartComponent } from './pie-chart/pie-chart.component';
 import { LineChartComponent } from './line-chart/line-chart.component';
+import { TreeMapComponent } from './tree-map/tree-map.component';
 
 @NgModule({
     declarations: [
@@ -26,6 +27,7 @@ import { LineChartComponent } from './line-chart/line-chart.component';
         BarChartComponent,
         PieChartComponent,
         LineChartComponent,
+        TreeMapComponent,
     ],
     imports: [
         BrowserModule,

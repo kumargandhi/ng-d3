@@ -19,6 +19,10 @@ export const Header_Menu = [
         label: 'Line chart',
         routerLink: ['line-chart'],
     },
+    {
+        label: 'Tree map',
+        routerLink: ['tree-map'],
+    },
 ];
 
 export const HeatMap_ColorRange = [
