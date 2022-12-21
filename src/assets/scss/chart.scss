@@ -49,3 +49,28 @@
         }
     }
 }
+
+.treemap-container {
+    .node {
+        box-sizing: border-box;
+        position: absolute;
+        overflow: hidden;
+        border: 1px solid rgb(177, 177, 177);
+      }
+    
+      .node-label {
+        padding: 4px;
+        line-height: 1em;
+        // white-space: pre;
+        position: relative;
+        top: 50%;
+        text-align: center;
+        white-space: nowrap;
+      }
+    
+      .node-value {
+        color: rgba(0,0,0,0.8);
+        font-size: 9px;
+        margin-top: 1px;
+      }
+}
