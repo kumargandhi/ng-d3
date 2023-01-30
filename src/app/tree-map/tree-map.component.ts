@@ -10,6 +10,7 @@ import {
 import * as d3 from 'd3v6';
 import { TREE_MAP_DATA } from './data';
 import * as d3Hierarchy from 'd3-hierarchy';
+import { AppWindowInfo, getWindowInfo } from '../commom/generics';
 
 @Component({
     selector: 'app-tree-map',
@@ -51,7 +52,6 @@ export class TreeMapComponent implements OnInit, OnDestroy {
     }
 
     private initializeChart(): void {
-        // Remove elements if already exist
         d3.select('#chartTooltip').selectAll('*').remove();
 
         const treemap = d3Hierarchy
@@ -89,12 +89,59 @@ export class TreeMapComponent implements OnInit, OnDestroy {
             });
         treemap(root);
 
+        const mousemove = function (s, d) {
+            let xPosition = s.pageX + 5;
+            let yPosition = s.pageY + 5;
+            let xOffset = 0;
+            const toolTipWidth = 220;
+            if (d['x0'] < toolTipWidth) {
+                xOffset = (toolTipWidth - d.dx) / 2;
+            } else {
+                xOffset = ((d['x0'] - toolTipWidth) / 2) * -1;
+            }
+            const windowInfo: AppWindowInfo = getWindowInfo();
+            if (yPosition + 150 > windowInfo.availableHeight) {
+                yPosition = yPosition - 150;
+            }
+            if (xPosition + 250 > windowInfo.windowWidth) {
+                xPosition = xPosition - 250;
+                yPosition = yPosition - 20;
+            }
+
+            d3.select('#chartTooltip').selectAll('*').remove();
+
+            d3.select('#chartTooltip')
+                .append('p')
+                .html('<span class="label-txt">Avg: </span><span class="label-val">' + d['data']['data']['avg'] + '</span>');
+            d3.select('#chartTooltip')
+                .style('left', xPosition + 'px')
+                .style('top', yPosition + 'px')
+                .style('display', 'block')
+                .style('opacity', 1);
+        };
+
+        const mouseout = function () {
+            d3.select('#chartTooltip').style('display', 'none').style('opacity', 0);
+            d3.select(this).style('z-index', 'unset');
+            d3.select(this).style('box-shadow', '');
+        };
+        const mouseover = function () {
+            d3.select(this).style(
+                'box-shadow',
+                '0px 0px 9px 2px rgba(102,102,102,0.85)'
+            );
+            d3.select(this).style('z-index', '1');
+        };
+
         d3.select('.treeMap-pos')
             .selectAll('.node')
             .data(root.leaves())
             .enter()
             .append('div')
             .attr('class', 'node')
+            .on('mousemove', mousemove.bind(this))
+            .on('mouseover', mouseover)
+            .on('mouseout', mouseout)
             .style('left', function (d) {
                 return d['x0'] + 'px';
             })
@@ -131,7 +178,6 @@ export class TreeMapComponent implements OnInit, OnDestroy {
     private drawChart(): void {
         this.width =
             this.chartContainer.nativeElement.getBoundingClientRect().width;
-        // this._chart.svg.attr('width', this.width);
     }
 
     private nodeColor(d) {

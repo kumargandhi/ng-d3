@@ -5,6 +5,7 @@
 - Heatmap chart
 - Pie chart
 - Line chart
+- Tree map chart
 
 ![ng-d3js](https://kumargandhi.github.io/assets/ng-d3js/NgD3.png)
 

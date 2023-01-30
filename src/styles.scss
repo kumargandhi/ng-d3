@@ -47,6 +47,20 @@ body {
     pointer-events: none;
     vertical-align: middle;
     z-index: 10;
+
+    p {
+        width: 100%;
+    }
+
+    .label-txt {
+        text-align: right;
+        width: 50%;
+    }
+
+    .label-val {
+        text-align: left;
+        width: 50%;
+    }
 }
 
 #heatMapTooltip {
